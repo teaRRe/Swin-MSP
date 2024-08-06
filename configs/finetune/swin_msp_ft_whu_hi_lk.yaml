@@ -1,0 +1,52 @@
+FUSED_LAYERNORM: False
+LR_SCALED: 16
+MODEL:
+  TYPE: swin
+  NAME: swin_msp_ft
+  DROP_PATH_RATE: 0.1                 # default: 0.1
+  DROP_RATE: 0.                       # default: 0.
+  LABEL_SMOOTHING: 0.                 # >0: LabelSmoothingCrossEntropy, default: 0.1
+  SWIN:
+    EMBED_DIM: 96
+    DEPTHS: [ 2, 2, 2, 2]
+    NUM_HEADS: [ 2, 2, 2, 2]
+    WINDOW_SIZE: 30                   # logic window_size * patch_size(2*9)
+    IN_CHANS: 1
+    PATCH_NORM: True
+    PATCH_SIZE: 5                     # PATCH_SIZE: 5 --> MARGIN: 2
+    MASK_RATIO: 0.85
+  NUM_CLASSES: 9
+  LOSS_WEIGHTS: False                  # 分类权重
+DATA:
+  DATASET: WHU_Hi_LongKou                 # Indian_Pines|pavia|paviaU|Salinas
+  BATCH_SIZE: 32
+  NUM_WORKERS: 0
+  PIN_MEMORY: True
+  MARGIN: 2                           # PATCH_SIZE: 5 --> MARGIN: 2
+  SAMPLE_WEIGHTS: False               # 采样权重
+  REMOVE_ZERO_LABELS: False            # 是否移除空白样本，微调时删除未分类像素
+  TEST_RATIO: 0.9                     # 测试比例，不同数据集不同
+  NORM_TARGETS: False               # IP数据集在固定采样时不需要NORM_TARGETS
+  ACT: True
+TRAIN:
+  EPOCHS: 100
+  WARMUP_EPOCHS: 10
+  WEIGHT_DECAY: 0.05
+  LAYER_DECAY: 0.8
+  BASE_LR: 1.25e-3
+  WARMUP_LR: 5e-7                     # 5e-7    6.16微调是2.5e-7
+  MIN_LR: 2.5e-7
+  CLIP_GRAD: 5.0
+  AUTO_RESUME: False
+  ACCUMULATION_STEPS: 1
+  USE_CHECKPOINT: False
+  OPTIMIZER:
+    NAME: adamw
+    EPS: 1e-8
+    BETAS: (0.9, 0.999)
+    MOMENTUM: 0.9
+SAVE_FREQ: 100
+PRINT_FREQ: 100
+AUG:
+  # >0: SoftTargetCrossEntropy, 0.8
+  MIXUP: 0.

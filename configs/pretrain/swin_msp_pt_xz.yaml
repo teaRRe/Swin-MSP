@@ -1,0 +1,50 @@
+LR_SCALED: 256
+MODEL:
+  TYPE: swin_mae
+  NAME: swin_msp_pt
+  DROP_PATH_RATE: 0.1             #  DROP_PATH_RATE: 0.2
+  DROP_RATE: 0.1
+  LABEL_SMOOTHING: 0.             # >0: LabelSmoothingCrossEntropy, 0.1
+  SWIN_MAE:
+    EMBED_DIM: 96
+    DEPTHS: [ 2, 2, 2, 2]         #
+    NUM_HEADS: [ 2, 2, 2, 2]      #
+    WINDOW_SIZE: 50               # logic window_size * patch_size(2*9)
+    IN_CHANS: 1
+    PATCH_NORM: True
+    PATCH_SIZE: 5                 # 同时改DATA.MARGIN ***
+    MASK_RATIO: 0.75
+  NUM_CLASSES: 9
+  IS_PRETRAIN: True
+  LOSS_WEIGHTS: False             # 损失权重
+DATA:
+  MARGIN: 2                       # 同时改PATCH_SIZE ***
+  DATASET: Xuzhou
+  BATCH_SIZE: 96
+  NUM_WORKERS: 0
+  PIN_MEMORY: True
+  SAMPLE_WEIGHTS: False           # 样本权重
+  REMOVE_ZERO_LABELS: True        # 移除未分类像素
+  NORM_TARGETS: False             # 预归一化
+  ACT: True                       # GeLU激活函数
+TRAIN:
+  START_EPOCH: 0
+  EPOCHS: 500                     #  makesure WARMUP_EPOCHS < EPOCHS
+  WARMUP_EPOCHS: 10
+  WEIGHT_DECAY: 0.05
+  BASE_LR: 5e-4                   # 5e-4
+  WARMUP_LR: 5e-7                 # 5e-7
+  MIN_LR: 5e-6                    #  MIN_LR: 5e-6
+  CLIP_GRAD: 5.0
+  AUTO_RESUME: False              #  AUTO_RESUME: False
+  ACCUMULATION_STEPS: 1
+  USE_CHECKPOINT: False
+  OPTIMIZER:
+    NAME: adamw
+    EPS: 1e-8
+    BETAS: (0.9, 0.999)
+    MOMENTUM: 0.9
+SAVE_FREQ: 50
+PRINT_FREQ: 50
+AUG:
+  MIXUP: 0.                         # >0: SoftTargetCrossEntropy, 0.8
