@@ -1,2 +1,75 @@
-# IEEE_TGRS_Swin-MSP
-The code will be available soon.
+# SwinMSP: A Shifted Windows Masked Spectral Pretraining Model for Hyperspectral Image Classification
+
+[[Paper]](https://ieeexplore.ieee.org/document/10606196)
+
+----
+
+The repository contains the implementation of the paper "SwinMSP: A Shifted Windows Masked Spectral Pretraining Model for Hyperspectral Image Classification"
+
+![SwinMSP.png](SwinMSP.png)
+
+
+
+## Installation
+
+----
+
+```bash
+pip install -r requirements.txt
+```
+
+You may install torch and torchvision manually.
+    
+```bash
+torch==1.12.0
+torchvision==0.13.0
+```
+
+## Usage
+
+----
+
+### Fine-tune
+
+##### For PaviUniversity Dataset:
+
+```bash
+python swin_msp_ft.py --cfg configs/finetune/swin_msp_ft_pu.yaml --pretrained output/swin_msp_pt/ckpt_epoch_499.pth --runs 10
+```
+
+The results will be saved in the `cls_result` directory. The class map will be saved in the `cls_map` directory. 
+The running log will be saved in the `log` directory. The weights will be saved in the `output` directory.
+
+### Pre-train
+
+##### For PaviUniversity Dataset:
+
+```bash
+python swin_msp_pt.py --cfg configs/pretrain/swin_mae_pt_pu.yaml --tag swin_msp_pt_pu
+```
+
+## Citation
+
+----
+
+```bibtex
+@ARTICLE{10606196,
+  author={Tian, Rui and Liu, Danqing and Bai, Yu and Jin, Yu and Wan, Guanliang and Guo, Yanhui},
+  journal={IEEE Transactions on Geoscience and Remote Sensing}, 
+  title={Swin-MSP: A Shifted Windows Masked Spectral Pretraining Model for Hyperspectral Image Classification}, 
+  year={2024},
+  volume={62},
+  number={},
+  pages={1-14},
+  keywords={Hyperspectral imaging;Task analysis;Feature extraction;Image classification;Computer architecture;Computational modeling;Long short term memory;Hyperspectral image (HSI) classification;pretraining model;Swin-MAE;transformer},
+  doi={10.1109/TGRS.2024.3431517}}
+
+```
+
+## Acknowledgement
+
+----
+
+[DeepHyperX](https://github.com/xiachangxue/DeepHyperX), [Swin-Transformer](https://github.com/microsoft/Swin-Transformer), 
+[Swin-MAE](https://github.com/Zian-Xu/Swin-MAE), [SpectralFormer](https://github.com/danfenghong/IEEE_TGRS_SpectralFormer), 
+[MAEST](https://github.com/ibanezfd/MAEST), [morphFormer](https://github.com/mhaut/morphFormer)
